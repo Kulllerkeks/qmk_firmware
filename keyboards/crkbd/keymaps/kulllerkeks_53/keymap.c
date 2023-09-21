@@ -3,6 +3,12 @@ Copyright 2019 @foostan
 Copyright 2020 Drashna Jaelre <@drashna>
 Copyright 2023 @Kulllerkeks
 
+
+Todo:
+    -convert aseprite animations to usable codes and implement them in arrays in animation.c
+    -compile fitmware as is without animation.c to see if everything works
+    -dail in tapterm settings for homerow mods
+
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or
