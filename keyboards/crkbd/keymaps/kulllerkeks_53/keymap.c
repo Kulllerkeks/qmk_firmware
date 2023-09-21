@@ -19,20 +19,65 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include QMK_KEYBOARD_H
 #include "keymap_german.h"
+#include "animation.c"
 //#include <stdio.h>
 //#include "keymap_german.h"
 
 #define _LayerBase 0    //base layer, alpha keys and homerow mods           --finished
 #define _LayerNav 2     //arrowkeys on the right side, mods on the left     --nearly finished
-#define _LayerProg 3    //special chars and stuff                           --changes number keys to numpad keys
-#define _LayerNumb 4    //numpad on the right,                              --open
-#define _LayerMacro 5   //copy, paste and co                                --open
-#define _LayerGame 6    //game layer with wasd and common mods on the left  --open
-#define _LayerGame2 7   //numbers and function keys on the left             --open
-#define _LayerMouse 8   //mouse keys and back button                        --open
-#define _LayerQud 9     //qaves of qud layer with numpad and common keys    --open
+#define _LayerProg 3    //special chars and stuff                           --finished
+#define _LayerNumb 4    //numpad on the right,                              --finished
+#define _LayerMacro 5   //copy, paste and co                                --finished
+#define _LayerSpec 6    //Special chars                                     --finished, dont know whats missing
+#define _LayerSelect 7  //Special Layer selection and multimedia keys       --finished
+#define _LayerGame 8    //game layer with wasd and common mods on the left  --finished
+#define _LayerGame2 9   //numbers and function keys on the left             --finished
+#define _LayerMouse 10  //mouse keys and back button                        --finished
+#define _LayerQud 11    //qaves of qud layer with numpad and common keys    --open
 
 
+// Custom Keycodes
+// Left-hand home row mods
+#define HOME_A LGUI_T(DE_A)
+#define HOME_S LALT_T(DE_S)
+#define HOME_D LCTL_T(DE_D)
+#define HOME_F LSFT_T(DE_F)
+
+// Right-hand home row mods
+#define HOME_J LSFT_T(DE_J)
+#define HOME_K LCTL_T(DE_K)
+#define HOME_L LALT_T(DE_L)
+#define HOME_ODI RGUI_T(DE_ODIA)
+
+// Layer
+#define ESC_MAC LT(_LayerMacro,KC_ESC)
+#define NAV_SPC LT(_LayerNav,KC_SPC)
+#define NUM_BSPC LT(_LayerNumb,KC_BSPC)
+#define MAC_TAB LT(_LayerMacro,KC_TAB)
+#define PRO_ENT LT(_LayerProg,KC_ENT)
+#define MO_SPEC MO(_LayerSpec)
+#define MO_SEL MO(_LayerSelect)
+#define TO_GAME TO(_LayerGame)
+#define TO_QUD TO(_LayerQud)
+
+//Macros
+#define M_COPY LCTL(KC_C)
+#define M_CUT LCTL(KC_X)
+#define M_PASTE LCTL(KC_V)
+#define M_REWI LCTL(DE_Z)
+#define M_REDO LCTL(DE_Y)
+
+//Mouse
+#define MS_LEFT KC_MS_BTN1
+#define MS_RIGH KC_MS_BTN2
+#define MS_B3 KC_MS_BTN3
+#define MS_B4 KC_MS_BTN4
+#define MS_B5 KC_MS_BTN5
+
+#define MS_WUP KC_MS_WH_UP
+#define MS_WDO KC_MS_WH_DOWN
+
+/* Dont know if needed
 enum custom_keycodes {
     LAYER0 = SAFE_RANGE,
     LAYER1,
@@ -41,76 +86,113 @@ enum custom_keycodes {
     LAYER4,
     LAYER5,
 };
+*/
 
 // base layout
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_LayerBase] = LAYOUT_split_3x6_3(
-  //,---------------------------------------------------------------------------------------------------.                    ,---------------------------------------------------------------------------------------------------.
-      KC_NO,    DE_Q,         DE_W,         DE_E,          DE_R,        DE_T,                        DE_Z, DE_U,         DE_I,         DE_O,         DE_P,             KC_NO,
-  //|--------------+-------------------+-----------------+-----------------+----------------+-----------|                    |----------+----------------+------------------+-----------------+--------------------+-------------|
-      KC_NO,    LGUI_T(DE_A), LALT_T(DE_S), LCTL_T(DE_D), LSFT_T(DE_F), DE_G,                        DE_H, LSFT_T(DE_J), LCTL_T(DE_K), LALT_T(DE_L), LGUI_T(DE_ODIA),  KC_NO,
-  //|--------------+-------------------+-----------------+-----------------+----------------+-----------|                    |----------+----------------+------------------+-----------------+--------------------+-------------|
-      KC_NO,    DE_Y,         DE_X,         DE_C,         DE_V,         DE_B,                        DE_N, DE_M,         DE_COMM,      DE_DOT,       DE_MINS,          KC_NO,
-  //|--------------+-------------------+-----------------+-----------------+----------------+-----------|                    |----------+----------------+------------------+-----------------+--------------------+-------------|
-                        MO(_LayerMacro),   LT(_LayerNav,KC_SPC),  LT(_LayerNumb,KC_BSPC),                        LT(_LayerMacro,KC_TAB),   LT(_LayerProg,KC_ENT),   KC_ESC
-                    //`--------------------------------------------------------------------------------'                     `--------------------------------------------------------------------------------'
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+     KC_NO,   DE_Q,    DE_W,    DE_E,    DE_R,    DE_T,                         DE_Z,    DE_U,    DE_I,    DE_O,    DE_P,    KC_NO,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+     KC_NO,   HOME_A,  HOME_S,  HOME_D,  HOME_F,  DE_G,                         DE_H,    HOME_J,  HOME_K,  HOME_L,  HOME_ODI,KC_NO,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+     KC_NO,   DE_Y,    DE_X,    DE_C,    DE_V,    DE_B,                         DE_N,    DE_M,    DE_COMM, DE_DOT,  DE_MINS, KC_NO,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                       KC_NO,   NAV_SPC,  NUM_BSPC,    MAC_TAB,  PRO_ENT,  KC_ESC
+                                      //`--------------------------'  `--------------------------'
   ),
 
   [_LayerNav] = LAYOUT_split_3x6_3(
-  //,---------------------------------------------------------------------------------------------------.                    ,---------------------------------------------------------------------------------------------------.
-      KC_NO,    KC_F5,         KC_F9,         KC_F11,        KC_F10,    KC_F12,                        KC_DEL,  KC_HOME,     KC_UP,         KC_END,         KC_WH_U,     KC_NO,
-  //|--------------+-------------------+-----------------+-----------------+----------------+-----------|                    |----------+----------------+------------------+-----------------+--------------------+-------------|
-      KC_NO,    KC_LGUI,       KC_LALT,       KC_LCTL,       KC_LSFT,   KC_TAB,                        KC_NO,   KC_LEFT,     KC_DOWN,       KC_RGHT,        KC_WH_D,     KC_NO,
-  //|--------------+-------------------+-----------------+-----------------+----------------+-----------|                    |----------+----------------+------------------+-----------------+--------------------+-------------|
-      KC_NO,    KC_NO,         KC_NO,         KC_NO,         KC_NO,     KC_NO,                         KC_NO,   KC_NO,       KC_NO,         KC_NO,          KC_NO,       KC_NO,
-  //|--------------+-------------------+-----------------+-----------------+----------------+-----------|                    |----------+----------------+------------------+-----------------+--------------------+-------------|
-                                            KC_NO,           KC_TRNS,               KC_NO,                         KC_NO,           KC_NO,           KC_ESC
-                    //`--------------------------------------------------------------------------------'                     `--------------------------------------------------------------------------------'
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+      KC_NO,  KC_F5,   KC_F9,   KC_F11,  KC_F10,  KC_F12,                       KC_DEL,  KC_HOME,  KC_UP,  KC_END,  KC_WH_U, KC_NO,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      KC_NO,  KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_TAB,                       KC_NO,   KC_LEFT, KC_DOWN, KC_RGHT, KC_WH_D, KC_NO,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      KC_NO,  KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                       KC_NO,  KC_TRNS,  NUM_BSPC,     MAC_TAB,  PRO_ENT,  KC_ESC
+                                      //`--------------------------'  `--------------------------'
   ),
 
   [_LayerProg] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      KC_TAB,  DE_EXLM, DE_AT,   DE_HASH, DE_DLR,  DE_PERC,                     DE_CIRC, DE_AMPR, DE_ASTR, DE_SLSH, DE_UNDS, KC_DEL,
+      KC_NO,  DE_EXLM, DE_AT,   DE_SLSH, DE_DLR,  DE_PERC,                      DE_ASTR, DE_PLUS, DE_MINS, DE_SLSH, DE_COLN, KC_NO,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LCTL, DE_DQUO, DE_LPRN, DE_RPRN, DE_LCBR, DE_RCBR,                     DE_MINS,  DE_EQL, DE_SCLN, DE_COLN, DE_BSLS, DE_QUOT,
+      KC_NO,  DE_EQL,  DE_LCBR, DE_RCBR, DE_LPRN, DE_RPRN,                      DE_SCLN, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, KC_NO,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT, DE_EURO, DE_TILD, DE_PIPE, DE_LBRC, DE_RBRC,                     DE_PLUS, DE_PLUS, DE_ACUT, DE_QUES, DE_LABK, DE_RABK,
+      KC_NO,  DE_DQUO, DE_LABK, DE_RABK, DE_LBRC, DE_RBRC,                      DE_QUES, DE_UNDS, DE_PERC, DE_BSLS, DE_HASH, KC_NO,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                        LCTL_T(KC_LGUI),   KC_SPC,  MO(_LayerNumb),   KC_TRNS, LCTL_T(KC_ENT), KC_LALT
+                                       KC_NO,  MO_SPEC,  NUM_BSPC,     MAC_TAB,  KC_TRNS,  KC_ESC
                                       //`--------------------------'  `--------------------------'
   ),
 
   [_LayerNumb] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-     TO(_LayerGame), KC_NO,  KC_NO,  KC_NO,  KC_NO,  DE_PERC,                   DE_PLUS,   KC_P7,   KC_P8,   KC_P9,   DE_ASTR,   KC_NUM,
+     KC_NO,   KC_NUM,  KC_NO,   KC_NO,   DE_PERC, KC_NO,                        DE_PLUS, KC_P7,   KC_P8,   KC_P9,   DE_ASTR, KC_NO,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_NO,    KC_NO,     KC_NO,  KC_NO,  DE_SS,  KC_NO,                       DE_MINS,   KC_P4,   KC_P5,   KC_P6,   DE_SLSH,   DE_DOT,
+     KC_NO,   KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, DE_DOT,                       DE_MINS, KC_P4,   KC_P5,   KC_P6,   DE_SLSH, KC_NO,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      TO(_LayerBase),    KC_NO,     KC_NO,  KC_NO,  KC_NO,  KC_NO,                       KC_P0,      KC_P1,   KC_P2,   KC_P3,   DE_COMM,   DE_EQL,
-  //|--------+--------+--------+--------+--------+--------+--------|     |--------+--------+--------+--------+--------+--------+--------|
-                                 LCTL_T(KC_LGUI), KC_TRNS,  KC_TRNS,      KC_TRNS , KC_ENT, KC_LALT
+     KC_NO,   KC_NO,   KC_NO,   DE_DLR,  DE_EURO, KC_PENT,                      KC_P0,   KC_P1,   KC_P2,   KC_P3,   DE_COMM, KC_NO,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                       KC_NO,   NAV_SPC,  KC_TRNS,     MAC_TAB,   PRO_ENT,   KC_ESC
+                                      //`--------------------------'     `--------------------------'
+  ),
+
+  [_LayerMacro] = LAYOUT_split_3x6_3(
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+     KC_NO,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                         KC_F6,  KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_NO,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+     KC_NO,   M_COPY,  M_CUT,   KC_NO,   M_PASTE, KC_F11,                        KC_F12, KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, KC_NO,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+     KC_NO,   M_REWI,  KC_NO,   KC_NO,   KC_NO,   M_REDO,                        KC_CAPS,KC_INS,  KC_PSCR, KC_NO,   KC_NUM,  KC_NO,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                         KC_NO,   KC_NO,   MO_SEL,      KC_TRNS, KC_NO,   KC_NO
+                                      //`--------------------------'     `--------------------------'
+  ),
+
+  [_LayerSpec] = LAYOUT_split_3x6_3(
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+     KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   DE_UDIA, KC_NO,   DE_ODIA, KC_NO,   KC_NO,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+     KC_NO,   DE_ADIA, DE_SS,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+     KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                       KC_NO,   KC_TRNS,  NUM_BSPC,    MAC_TAB,   KC_TRNS,   KC_ESC
+                                      //`--------------------------'     `--------------------------'
+  ),
+
+  [_LayerSelect] = LAYOUT_split_3x6_3(
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+     KC_NO,   TO_GAME, KC_NO,   KC_NO,   KC_NO,   TO_QUD,                       KC_NO,   KC_VOLD, KC_VOLU,   KC_NO,   KC_NO,   KC_NO,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+     KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   KC_MPLY, KC_MPRV, KC_MNXT, KC_NO,   KC_NO,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+     KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                         KC_NO,   KC_NO,   KC_TRNS,    KC_TRNS, KC_NO,   KC_NO
                                       //`--------------------------'     `--------------------------'
   ),
 
   [_LayerGame] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      KC_ESC,     DE_T,   DE_Q,    DE_W,    DE_E,   DE_R,                         DE_Z,   DE_U,   DE_I,    DE_O,   DE_P,    DE_UDIA,
+      KC_NO,  KC_ESC,  DE_Q,    DE_W,    DE_E,   DE_R,                          DE_Z,    DE_U,    DE_I,    DE_O,    DE_P,    KC_NO,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_TAB,     DE_G,   DE_A,    DE_S,    DE_D,   DE_F,                         DE_H,   DE_J,   DE_K,    DE_L,   DE_ODIA, DE_ADIA,
+      KC_NO,  KC_TAB,  DE_A,    DE_S,    DE_D,   DE_F,                          DE_H,    DE_J,    DE_K,    DE_L,    DE_ODIA, KC_NO,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT,    DE_B,   DE_Y,    DE_X,    DE_C,   DE_V,                         DE_N,   DE_M,   DE_COMM, DE_DOT, DE_MINS, DE_AT,
+      KC_NO,  KC_LSFT, DE_Y,    DE_X,    DE_C,   DE_V,                          DE_N,    DE_M,    DE_COMM, DE_DOT,  DE_MINS, KC_NO,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                    KC_LCTL, KC_SPC,MO(_LayerGame2),  KC_LALT, KC_ENT,  KC_BSPC
+                                    KC_LCTL, KC_SPC,MO(_LayerGame2),   KC_LALT, KC_ENT,  KC_BSPC
                                       //`--------------------------'  `-----------z---------------'
   ),
 
   [_LayerGame2] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      KC_ENT,    KC_6,    KC_7,    KC_8,    KC_9,   KC_0,                       KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,    KC_NO,
+      KC_NO,  KC_6,    KC_7,    KC_8,    KC_9,    KC_0,                         KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,    KC_NO,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_TAB,    KC_1,    KC_2,    KC_3,    KC_4,   KC_5,                       KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,    KC_NO,
+      KC_NO,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,   KC_NO,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT,   KC_F1,   KC_F2,   KC_F3,   KC_F4,  KC_F5,                      KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,    KC_NO,
+      KC_NO,  DE_M,    DE_B,    DE_G,    DE_T,    KC_ENT,                       KC_F11,  KC_F12,  KC_NO,   KC_NO,   KC_NO,    KC_NO,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           KC_LCTL, KC_SPC,  KC_TRNS,   TO(_LayerBase),   KC_NO,   KC_NO
                                       //`--------------------------'  `--------------------------'
@@ -118,14 +200,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_LayerMouse] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      KC_NO, KC_NO,   KC_NO,   KC_NO, KC_MS_BTN2, KC_MS_WH_UP,              KC_MS_BTN1, KC_MS_BTN2, KC_NO,   KC_NO,   KC_NO,    KC_NO,
+     KC_NO,   KC_NO,   MS_B5,   MS_B4,   MS_B3,   MS_WUP,                       MS_LEFT, MS_RIGH, KC_NO,   KC_NO,   KC_NO,   KC_NO,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_NO, KC_NO,  KC_MS_BTN4, KC_MS_BTN5, KC_MS_BTN1, KC_MS_WH_DOWN,         KC_NO,  KC_NO,      KC_NO,   KC_NO,   KC_NO,    KC_NO,
+     KC_NO,   KC_NO,   KC_NO,   MS_RIGH, MS_LEFT, MS_WDO,                       KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_NO, KC_NO,   KC_NO,   KC_NO, KC_MS_BTN3, KC_NO,                        KC_NO,  KC_NO,      KC_NO,   KC_NO,   KC_NO,    KC_NO,
+     KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                               LCTL_T(KC_LGUI), LT(_LayerNav,KC_SPC),  KC_LSFT,   KC_NO,   KC_NO,   KC_NO
+                                           KC_NO ,KC_NO,  KC_LSFT,     KC_LCTL,  KC_NO,   KC_NO
                                       //`--------------------------'  `--------------------------'
+  ),
+
+  [_LayerQud] = LAYOUT_split_3x6_3(
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+     KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+     KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+     KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,                        KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,   KC_NO,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                       KC_NO,   KC_NO,  KC_NO,         TO(_LayerBase),KC_NO,   KC_NO
+                                      //`--------------------------'     `--------------------------'
   )
 };
 // clang-format on
@@ -438,6 +532,7 @@ static void print_status_narrow(void) {
             oled_set_cursor(0, 9);
             oled_write("     ", false);
             break;
+        /*
         case _LayerMod:
             oled_set_cursor(0, 4);
             oled_write_raw_P(layerImageClean, sizeof(layerImageClean));
@@ -447,6 +542,7 @@ static void print_status_narrow(void) {
             oled_set_cursor(0, 9);
             oled_write("     ", false);
             break;
+        */
     }
 
     /* KEYBOARD PET RENDER START */
@@ -456,13 +552,25 @@ static void print_status_narrow(void) {
 
 oled_rotation_t oled_init_user(oled_rotation_t rotation) { return OLED_ROTATION_270; }
 
+int currentFrame = 0;
+
 bool oled_task_user(void) {
     /* KEYBOARD PET VARIABLES START */
     current_wpm   = get_current_wpm();
     led_usb_state = host_keyboard_led_state();
 
     /* KEYBOARD PET VARIABLES END */
-    if (is_keyboard_master()) {
+
+    /* Starting animation*/
+    if (currentFrame == anim_allArray_LEN -1) {
+        currentFrame = 0;
+    }
+    oled_write_raw_P(cleanScreen, sizeof(cleanScreen));
+    oled_write_raw_P(anim_allArray[currentFrame], sizeof(anim_allArray[currentFrame]));
+    currentFrame +=1;
+
+    //if (is_keyboard_master()) {
+    if (false) {
         print_status_narrow();
     }
     return false;
@@ -502,4 +610,3 @@ void pointing_device_init_user(void) {
     set_auto_mouse_layer(_LayerMouse);
     set_auto_mouse_enable(true);         // always required before the auto mouse feature will work
 }
-
