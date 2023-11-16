@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include QMK_KEYBOARD_H
 #include "keymap_german.h"
-#include "animation.c"
+//#include "animation.c"
 //#include <stdio.h>
 //#include "keymap_german.h"
 
@@ -542,6 +542,8 @@ static void print_status_narrow(void) {
 
     /* KEYBOARD PET RENDER START */
     render_luna(0, 13);
+
+    //oled_write_raw_P(anim_starting35, sizeof(anim_starting35));
     /* KEYBOARD PET RENDER END */
 }
 
@@ -555,14 +557,6 @@ bool oled_task_user(void) {
     led_usb_state = host_keyboard_led_state();
 
     /* KEYBOARD PET VARIABLES END */
-
-    /* Starting animation*/
-    if (currentFrame == anim_allArray_LEN -1) {
-        currentFrame = 0;
-    }
-    oled_write_raw_P(cleanScreen, sizeof(cleanScreen));
-    oled_write_raw_P(anim_allArray[currentFrame], sizeof(anim_allArray[currentFrame]));
-    currentFrame +=1;
 
     //if (is_keyboard_master()) {
     if (false) {
