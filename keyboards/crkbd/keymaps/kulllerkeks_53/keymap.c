@@ -462,7 +462,6 @@ static void print_status_narrow(void) {
     /* Print current layer */
     oled_set_cursor(0,0);
     oled_write("LAYER", false);
-
     switch (get_highest_layer(layer_state)) {
         case _LayerBase:
             oled_set_cursor(0, 4);
@@ -558,8 +557,7 @@ bool oled_task_user(void) {
 
     /* KEYBOARD PET VARIABLES END */
 
-    //if (is_keyboard_master()) {
-    if (false) {
+    if (is_keyboard_master()) {
         print_status_narrow();
     }
     return false;
