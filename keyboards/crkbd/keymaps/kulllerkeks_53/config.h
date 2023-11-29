@@ -23,13 +23,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define USE_MATRIX_I2C
 
 /* Select hand configuration */
-
-#define MASTER_LEFT
+#define USB_VBUS_PIN 19
+//#define SPLIT_USB_DETECT
+#define SPLIT_HAND_PIN 19
+//#define MASTER_LEFT
 // #define MASTER_RIGHT
-// #define EE_HANDS
+//#define EE_HANDS
 
 //#define TAPPING_FORCE_HOLD
 //#define TAPPING_TERM 100
+#define I2C_DRIVER I2CD1
 
 #define SPLIT_POINTING_ENABLE
 #define POINTING_DEVICE_RIGHT
@@ -38,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define CIRQUE_PINNACLE_TAP_ENABLE
 #define POINTING_DEVICE_AUTO_MOUSE_ENABLE
 //#define POINTING_DEVICE_TASK_THROTTLE_MS 10
-//#define CIRQUE_PINNACLE_CURVED_OVERLAY
+#define CIRQUE_PINNACLE_CURVED_OVERLAY
 #define CIRQUE_PINNACLE_DIAMETER_MM 40
 //#define CIRQUE_PINNACLE_ATTENUATION EXTREG__TRACK_ADCCONFIG__ADC_ATTENUATE_4X
 

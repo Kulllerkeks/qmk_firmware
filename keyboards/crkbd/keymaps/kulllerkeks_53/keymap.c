@@ -93,7 +93,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
       DE_Y,    DE_X,    DE_C,    DE_V,    DE_B,                         DE_N,    DE_M,    DE_COMM, DE_DOT,  DE_MINS,
   //|--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------|
-                              KC_NO,   NAV_SPC,  NUM_BSPC,    MAC_TAB,  PRO_ENT,  KC_ESC
+                              MO(_LayerMouse),   NAV_SPC,  NUM_BSPC,    MAC_TAB,  PRO_ENT,  KC_ESC
                             //`--------------------------'  `--------------------------'
   ),
 
@@ -596,4 +596,12 @@ bool oled_task_user(void) {
 void pointing_device_init_user(void) {
     set_auto_mouse_layer(_LayerMouse);
     set_auto_mouse_enable(true);         // always required before the auto mouse feature will work
+}
+
+void keyboard_post_init_user(void) {
+  // Customise these values to desired behaviour
+  debug_enable=true;
+  //debug_matrix=true;
+  debug_keyboard=true;
+  debug_mouse=true;
 }
