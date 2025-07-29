@@ -61,6 +61,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define NUM_BSPC LT(_LayerNumb,KC_BSPC)
 #define MAC_TAB LT(_LayerMacro,KC_TAB)
 #define PRO_ENT LT(_LayerProg,KC_ENT)
+#define SPEC_ESC LT(_LayerSpec,KC_ESC)
 #define MO_SPEC MO(_LayerSpec)
 #define MO_SEL MO(_LayerSelect)
 #define TO_GAME TO(_LayerGame)
@@ -93,7 +94,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------|
       DE_Y,    DE_X,    DE_C,    DE_V,    DE_B,                         DE_N,    DE_M,    DE_COMM, DE_DOT,  DE_MINS,
   //|--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------|
-                              MO(_LayerSpec),   NAV_SPC,  NUM_BSPC,    MAC_TAB,  PRO_ENT,  KC_ESC
+                              MO(_LayerMacro),   NAV_SPC,  NUM_BSPC,    MAC_TAB,  PRO_ENT,  SPEC_ESC
                             //`--------------------------'  `--------------------------'
   ),
 
